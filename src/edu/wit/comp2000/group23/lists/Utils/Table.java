@@ -30,7 +30,9 @@ public class Table {
 		
 	}
 	
-	public void takeTurn(int numOfPlayers){
+	//Returns true if a winner is determined returns false if a war is required
+	
+	public boolean takeTurn(int numOfPlayers){
 		if(numOfPlayers==2){
 			
 			//Player2 wins
@@ -39,6 +41,7 @@ public class Table {
 				spoilsWinner=2;
 				spoils.add(player1);
 				spoils.add(player2);
+				return true;
 			}
 			
 			//Player1 wins
@@ -47,6 +50,7 @@ public class Table {
 				spoilsWinner=1;
 				spoils.add(player1);
 				spoils.add(player2);
+				return true;
 			}	
 				//A war:
 				
@@ -55,6 +59,7 @@ public class Table {
 				spoils.add(player1);
 				spoils.add(player2);
 				takeTurn(2);
+				return true;
 			}
 		} else if(numOfPlayers==4){
 			
@@ -66,6 +71,7 @@ public class Table {
 				spoils.add(player3);
 				spoils.add(player4);
 				spoilsWinner=1;
+				return true;
 			}
 			
 			//Player2 wins
@@ -76,6 +82,7 @@ public class Table {
 				spoils.add(player3);
 				spoils.add(player4);
 				spoilsWinner=2;
+				return true;
 			}
 			
 			//Player3 wins
@@ -86,6 +93,7 @@ public class Table {
 				spoils.add(player3);
 				spoils.add(player4);
 				spoilsWinner=3;
+				return true;
 			}
 			
 			//Player4 wins
@@ -96,9 +104,10 @@ public class Table {
 				spoils.add(player3);
 				spoils.add(player4);
 				spoilsWinner=4;
+				return true;
 			}
 		}
-		
+		return false;
 	}
 	
 }
