@@ -2,8 +2,9 @@ package edu.wit.comp2000.group23.lists.Utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 
-public class Pile{
+public class Pile implements Iterable<Card>{
 	
 	private ArrayList<Card> cards;
 	private int id;
@@ -80,5 +81,11 @@ public class Pile{
 	 */
 	public void clear(){
 		this.cards.clear();
+	}
+
+	@Override
+	public Iterator<Card> iterator() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

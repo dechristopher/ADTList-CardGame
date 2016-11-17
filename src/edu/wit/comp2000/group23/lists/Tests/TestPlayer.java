@@ -44,7 +44,7 @@ public class TestPlayer {
 		Player player = new Player(0, new Hand(), new Pile());
 		Card c1 = new Card(1, SUIT.Clubs);
 		player.setCurrentCard(c1);
-		player.putCardInPile();
+		player.addCardToSpoils();
 		boolean playerEmptyHand = player.getHand().isEmpty();
 		Assert.assertEquals(true, playerEmptyHand);
 	}
@@ -55,7 +55,8 @@ public class TestPlayer {
 		Player player = new Player(0, new Hand(), new Pile());
 		Card c1 = new Card(1, SUIT.Clubs);
 		player.setCurrentCard(c1);
-		player.putCardInPile();
+		player.addCardToSpoils();
+		player.addSpoilsToPile();
 		player.drawsCard();
 		String expected = c1.toString();
 		String actual = player.getCurrentCard().toString();
@@ -90,11 +91,12 @@ public class TestPlayer {
 		Card c2 = new Card(2, SUIT.Clubs);
 		Card c3 = new Card(3, SUIT.Clubs);
 		player.setCurrentCard(c3);
-		player.putCardInPile();
+		player.addCardToSpoils();
 		player.setCurrentCard(c2);
-		player.putCardInPile();
+		player.addCardToSpoils();
 		player.setCurrentCard(c1);
-		player.putCardInPile();
+		player.addCardToSpoils();
+		player.addSpoilsToPile();
 		player.drawsWarCard();
 		Assert.assertEquals(true, player.getHand().isEmpty());
 	}
