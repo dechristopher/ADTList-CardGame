@@ -6,16 +6,12 @@ import java.util.Collections;
 public class Pile{
 	
 	private ArrayList<Card> cards;
-	private int id;
-	private static int idNext = 0;
 	
 	/**
 	 * Constructor for Pile
 	 */
 	public Pile(){
 		this.cards = new ArrayList<Card>();
-		this.id = idNext;
-		Pile.idNext++;
 	}
 	
 	/**
@@ -34,7 +30,7 @@ public class Pile{
 		for(Card c : this.cards){
 			cardPile += c + " ";
 		}
-		return cardPile + "Pile ID: " + id;
+		return cardPile;
 	}
 	
 	/**
@@ -80,5 +76,17 @@ public class Pile{
 	 */
 	public void clear(){
 		this.cards.clear();
+	}
+	
+	/**
+	 * add pile to pile method
+	 * 
+	 * LOOK AS LOOK FROM PILE
+	 * @param p
+	 */
+	public void addPileToPile(Pile p){
+		for(int i = this.getLength() - 1; i > -1; i--){
+			p.add(this.remove(i));
+		}
 	}
 }

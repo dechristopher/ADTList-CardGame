@@ -26,7 +26,7 @@ public class TestPile {
 		Card c2 = new Card(2, SUIT.Clubs);
 		pile.add(c1);
 		pile.add(c2);
-		String expected = "Ace of Clubs 2 of Clubs Pile ID: 2";
+		String expected = "Ace of Clubs 2 of Clubs ";
 		Assert.assertEquals(expected, pile.toString());
 	}
 	
@@ -71,5 +71,15 @@ public class TestPile {
 		pile.add(c2);
 		pile.clear();
 		Assert.assertEquals(true, pile.isEmpty());
+	}
+	
+	@Test
+	public void testPileToPile(){
+		Pile pile = new Pile();
+		Pile testPile = new Pile();
+		Card c1 = new Card(1, SUIT.Clubs);
+		pile.add(c1);
+		pile.addPileToPile(testPile);
+		Assert.assertEquals(1, testPile.getLength());
 	}
 }
