@@ -14,6 +14,10 @@ public class Pile{
 		this.cards = new ArrayList<Card>();
 	}
 	
+	public ArrayList<Card> getCards(){
+		return this.cards;
+	}
+	
 	/**
 	 * shuffle uses Collections.sort
 	 */
@@ -85,8 +89,14 @@ public class Pile{
 	 * @param p
 	 */
 	public void addPileToPile(Pile p){
-		for(int i = this.getLength() - 1; i > -1; i--){
+		/*for(int i = this.getLength() - 1; i > -1; i--){
 			p.add(this.remove(i));
+		}*/
+		
+		for(Card c : this.cards){
+			p.add(c);
 		}
+		
+		this.cards.clear();
 	}
 }

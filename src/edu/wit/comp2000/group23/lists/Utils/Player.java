@@ -30,10 +30,7 @@ public class Player {
 	 * @param playerID
 	 */
 	public Player(int playerID) {
-		this.playerID = playerID;
-		this.hand = new Hand();
-		this.pile = new Pile();
-		this.spoils = new Pile();
+		this(playerID, new Hand(), new Pile());
 	}
 
 	/**
@@ -45,6 +42,14 @@ public class Player {
 		return this.hand;
 	}
 
+	/**
+	 * return the number of cards left in hand
+	 * @return
+	 */
+	public int getNumCards(){
+		return this.hand.getLength();
+	}
+	
 	/**
 	 * add to the player's hand
 	 * 
@@ -157,6 +162,13 @@ public class Player {
 			}
 		}
 	}
+	
+	/**
+	 * 
+	 */
+	public Card drawCard(){
+		return this.hand.remove(hand.getLength()-1);
+	}
 
 	/**
 	 * add pile to hand, also shuffles pile
@@ -165,9 +177,15 @@ public class Player {
 		// shuffle the deck before adding pile to hand
 		this.pile.shuffle();
 
-		for (int i = 0; i < this.pile.getLength(); i++) {
+		/*for (int i = 0; i < this.pile.getLength(); i++) {
 			this.hand.add(this.pile.remove(i));
+		}*/
+		
+		for(Card c : this.getPile().getCards()){
+			this.hand.add(c);
 		}
+		
+		this.getPile().clear();
 	}
 
 	/**
@@ -192,7 +210,6 @@ public class Player {
 	 * toString method returns String
 	 */
 	public String toString() {
-		return "Player's playerID: " + this.getplayerID() + "\nPlayer's hand: " + this.getHand()
-				+ "\nPlayer's current card: " + this.getCurrentCard();
+		return "Player's playerID: " + this.getplayerID() + "\nPlayer's hand: " + this.getHand();
 	}
 }

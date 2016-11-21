@@ -8,7 +8,11 @@ public class War {
 
 	public static void main(String[] args) {
 		// Scanner object for user input
-
+		Scanner input = new Scanner(System.in);
+		
+		System.out.print("~ W A R ~\nNumber of Players (2/4): ");
+		int numPlayers = input.nextInt();
+		
 		// deck instantiation and shuffle
 		Deck deck = new Deck();
 		deck.shuffle();
@@ -30,7 +34,7 @@ public class War {
 
 		player1 = new Player(1, new Hand(), new Pile());
 		player2 = new Player(2, new Hand(), new Pile());
-		table = new Table();
+		table = new Table(player1, player2);
 
 		/*
 		 * Adds cards to players hands Handles both 2 and 4 players
@@ -54,44 +58,16 @@ public class War {
 		 * player X wins.
 		 */
 
-		while (!player1.getHand().isEmpty() && !player2.getHand().isEmpty()) {
-			System.out.println("Round " + counter + ":");
-			player1.drawsCard();
-			table.playCard(player1.getCurrentCard(), 1);
-			player2.drawsCard();
-			table.playCard(player2.getCurrentCard(), 2);
-			System.out.println("Player 1's card is : " + player1.getCurrentCard());
-			System.out.println("Player 2's card is : " + player2.getCurrentCard());
-			if (table.takeTurn() == 1) {
-				System.out.println("Player 1 wins the round!");
-				//System.out.println(table.getSpoils());
-				table.getSpoils().addPileToPile(player1.getPile());
-				System.out.println(player1.getPile());
-				table.getSpoils().clear();
-			}
-			if (table.takeTurn() == 2) {
-				System.out.println("Player 2 wins the round!");
-				System.out.println(table.getSpoils());
-				table.getSpoils().clear();
-			}
-			if (table.takeTurn() == 0) {
-				System.out.println("War activated!");
-				player1.drawsWarCard();
-				player2.drawsWarCard();
-			}
-			/*
-			 * while(player1.getPile().isEmpty() == false &&
-			 * player2.getPile().isEmpty() == false) {
-			 * 
-			 * }
-			 */
-			counter++;
+		int roundNum = 0;
+		while(true){
+			System.out.println("TURN " + roundNum);
+			table.Sync();
+			roundNum++;
 		}
-		
-		System.out.println("Player 1's Hand: " + player1.getHand().getLength());
-		System.out.println("Player 2's Hand: " + player2.getHand().getLength());
-		System.out.println("Player 1's Pile: " + player1.getPile().getLength());
-		System.out.println("Player 2's Pile: " + player2.getPile().getLength());
 	}
 
+	public static void gameOver(Player p){
+		System.out.println("Player " + p.getplayerID() + " has won!");
+		System.exit(0);
+	}
 }

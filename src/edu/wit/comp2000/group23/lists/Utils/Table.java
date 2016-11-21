@@ -1,59 +1,150 @@
-
-
 package edu.wit.comp2000.group23.lists.Utils;
 
-
-//Owner: Jeffrey Conner
+import edu.wit.comp2000.group23.lists.War;
 
 public class Table {
-	private Card player1;
-	private Card player2;
-	private Pile spoils;
+	private Player player1;
+	private Player player2;
+	private Card player1Card;
+	private Card player2Card;
+	private Pile spoils = new Pile();
 	
-	public Table(){
+	public Table(Player p1, Player p2){
 		this.spoils = new Pile();
-	}
-	
-	public Table(int numOfPlayers){
-		this.spoils = new Pile();
+		this.player1 = p1;
+		this.player2 = p2;
 	}
 	
 	public Pile getSpoils(){
 		return this.spoils;
 	}
 	
-	public void playCard(Card c, int playerID){
-		if(playerID==1){
-			this.player1=c;
-			this.spoils.add(player1); 
-		} else if(playerID==2){
-			this.player2=c;
-			this.spoils.add(player2);
+	public Player Sync(){
+		checkForLoss();
+		
+		//draw cards to table
+		this.player1Card = this.player1.drawCard();
+		this.player2Card = this.player2.drawCard();
+		
+		//determine winner
+		Player winner = determineWinner();
+		
+		//handle wars
+		while(winner == null){
+			playWar(player1);
+			playWar(player2);
+			winner = determineWinner();
+			
+			System.out.println(winner);
+		}
+		
+		//grant winner the spoils of war
+		this.spoils.add(player1Card);
+		this.spoils.add(player2Card);
+		this.spoils.addPileToPile(winner.getPile());
+		
+		//get rid of residual spoils
+		
+		System.out.println("WINNER: Player " + winner.getplayerID() + " - Cards: " + winner.getNumCards() + " - Pile: " + winner.getPile().getLength());
+		
+		//return winner
+		return winner;
+	}
+	
+	public void playWar(Player p){
+		int id = p.getplayerID();
+		
+		if(p.getNumCards() >= 4){
+			//System.out.println(">= 4");
+			if(id == 1){
+				this.spoils.add(this.player1Card);
+			}else{
+				this.spoils.add(this.player2Card);
+			}
+			
+			this.spoils.add(p.drawCard());
+			this.spoils.add(p.drawCard());
+			this.spoils.add(p.drawCard());
+			
+			if(id == 1){
+				this.player1Card = p.drawCard();
+			}else{
+				this.player2Card = p.drawCard();
+			}
+		}else if(p.getNumCards() == 1){
+			//System.out.println("== 1");
+			if(id == 1){
+				this.player1Card = p.drawCard();
+			}else{
+				this.player2Card = p.drawCard();
+			}
+		}else if(p.getNumCards() < 4 && p.getNumCards() > 1){
+			//System.out.println("< 4 && > 1");
+			if(id == 1){
+				this.spoils.add(this.player1Card);
+			}else{
+				this.spoils.add(this.player2Card);
+			}
+			
+			for(int i = p.getNumCards()-1; i > 0; i--){
+				this.spoils.add(p.drawCard());
+			}
+			
+			if(id == 1){
+				this.player1Card = p.drawCard();
+			}else{
+				this.player2Card = p.drawCard();
+			}
+		}else if(p.getNumCards() == 0){
+			//System.out.println("== 0");
+			if(!p.getPile().isEmpty()){
+				p.addPileToHand();
+				playWar(p);
+			}else{
+				if(id == 1){
+					War.gameOver(this.player2);
+				}else{
+					War.gameOver(this.player1);
+				}
+			}
 		}
 	}
 	
-	//Returns int for winning player if a winner is determined
-	//Returns other int in WAR situations
-	//Returns 0 for two person WAR in two person game
+	public void checkForLoss(){
+		if(this.player1.getNumCards() == 0){
+			if(this.player1.getPile().isEmpty()){
+				War.gameOver(this.player2);
+			}else{
+				this.player1.addPileToHand();
+				System.out.println("Player1: " + this.player1.getNumCards());
+			}
+		}
+		if(this.player2.getNumCards() == 0){
+			if(this.player2.getPile().isEmpty()){
+				War.gameOver(this.player1);
+			}else{
+				this.player2.addPileToHand();
+				System.out.println("Player2: " + this.player2.getNumCards());
+			}
+		}
+	}
 	
-	public int takeTurn(){
-			
-			//Player2 wins:
-			
-			if(player1.compareTo(player2)<0){
-				return 2;
-			}
-			
+	/**
+	 * Returns winning player or null for war situation
+	 * @return Player object or null
+	 */
+	public Player determineWinner(){
 			//Player1 wins:
-			
-			else if(player1.compareTo(player2)>0){
-				return 1;
+			if(this.player1Card.compareTo(this.player2Card)>0){
+				return player1;
 			}	
-				//A war:
-				
-			 else if(player1.compareTo(player2)==0){
-				return 0;
+			//Player2 wins:
+			else if(this.player1Card.compareTo(this.player2Card)<0){
+				return player2;
 			}
-			return 0;
+			//A war:	
+			else{
+				return null;
+			}
 	}
 }
